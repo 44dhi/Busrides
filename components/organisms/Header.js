@@ -1,5 +1,6 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from 'prop-types';
+import { GCHeader } from 'gc-tortilla';
 import IcomoonReact from "icomoon-react";
 import iconSet from "../icons/selection.json";
 import Link from 'next/link';
@@ -74,66 +75,69 @@ export default function Header(props) {
     }
 
     return (
-        <div className={styles.header}>
-            <div className={styles.headerContent}>
-                <div className={styles.menuIcon} onClick={toggleMenu}>
-                    <IcomoonReact iconSet={iconSet} size={18} icon="menu"/>
-                </div>
-                <Link href={getHomeUrl()}>
-                    <img className={styles.logo} src={props.settings.logo} alt={props.settings.title}/>
-                </Link>
-                <ul className={styles.navItems}>
-                    {getNavItems().map(navItem => (
-                        <li key={navItem.url}>
-                            <Link href={cleanUrl(navItem.url)}>
-                                <a className={styles.navItem}>{navItem.label}</a>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-                <ul className={styles.navItems}>
-                    <li className={styles.searchBar} style={props.hideSearchBar ? {zIndex: -1} : undefined}>
-                        <input className={styles.searchBar} ref={searchInput} aria-label={props.t["Search Busrides"]} onKeyDown={e => e.key === "Enter" ? search() : undefined}></input>
-                        <a className={styles.navItem} onClick={search}>
-                            <IcomoonReact iconSet={iconSet} size={18} icon="search"/>
-                        </a>
-                    </li>
-                    <li className={styles.accessabilityButton}>
-                        <AccessabilityMenu t={props.t}/>
-                    </li>
-                    <li>
-                        <Link href={getOppositeLangUrl()}>
-                            <a className={styles.navItem} title={props.t.getOppositeLocaleFull}>{props.t.getOppositeLocale.toUpperCase()}</a>
-                        </Link>
-                    </li>
-                </ul>
-                {isSearchMenuOpen &&
-                    <MobileSearchModal t={props.t} openSearchMenu={openSearchMenu}/>
-                }
-            </div>
-            { isMenuOpen ? 
-                <div className={styles.mobileMenu}>
-                    <div className={styles.closeButton} onClick={toggleMenu}>
-                        <IcomoonReact iconSet={iconSet} size={10} icon="close"/>
+        <React.Fragment>
+            <GCHeader/>
+            <div className={styles.header}>
+                <div className={styles.headerContent}>
+                    <div className={styles.menuIcon} onClick={toggleMenu}>
+                        <IcomoonReact iconSet={iconSet} size={18} icon="menu"/>
                     </div>
+                    <Link href={getHomeUrl()}>
+                        <img className={styles.logo} src={props.settings.logo} alt={props.settings.title}/>
+                    </Link>
                     <ul className={styles.navItems}>
                         {getNavItems().map(navItem => (
                             <li key={navItem.url}>
-                                <Link href={navItem.url}>
+                                <Link href={cleanUrl(navItem.url)}>
                                     <a className={styles.navItem}>{navItem.label}</a>
                                 </Link>
                             </li>
                         ))}
+                    </ul>
+                    <ul className={styles.navItems}>
+                        <li className={styles.searchBar} style={props.hideSearchBar ? {zIndex: -1} : undefined}>
+                            <input className={styles.searchBar} ref={searchInput} aria-label={props.t["Search Busrides"]} onKeyDown={e => e.key === "Enter" ? search() : undefined}></input>
+                            <a className={styles.navItem} onClick={search}>
+                                <IcomoonReact iconSet={iconSet} size={18} icon="search"/>
+                            </a>
+                        </li>
+                        <li className={styles.accessabilityButton}>
+                            <AccessabilityMenu t={props.t}/>
+                        </li>
                         <li>
-                            <Link href={getOppositeLangHomeUrl()}>
-                                <a className={styles.navItem}>{props.t.getOppositeLocale.toUpperCase()}</a>
+                            <Link href={getOppositeLangUrl()}>
+                                <a className={styles.navItem} title={props.t.getOppositeLocaleFull}>{props.t.getOppositeLocale.toUpperCase()}</a>
                             </Link>
                         </li>
                     </ul>
+                    {isSearchMenuOpen &&
+                        <MobileSearchModal t={props.t} openSearchMenu={openSearchMenu}/>
+                    }
                 </div>
-            : undefined}
-            
-        </div>
+                { isMenuOpen ? 
+                    <div className={styles.mobileMenu}>
+                        <div className={styles.closeButton} onClick={toggleMenu}>
+                            <IcomoonReact iconSet={iconSet} size={10} icon="close"/>
+                        </div>
+                        <ul className={styles.navItems}>
+                            {getNavItems().map(navItem => (
+                                <li key={navItem.url}>
+                                    <Link href={navItem.url}>
+                                        <a className={styles.navItem}>{navItem.label}</a>
+                                    </Link>
+                                </li>
+                            ))}
+                            <li>
+                                <Link href={getOppositeLangHomeUrl()}>
+                                    <a className={styles.navItem}>{props.t.getOppositeLocale.toUpperCase()}</a>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                : undefined}
+                
+            </div>
+        </React.Fragment>
     );
 }
 
